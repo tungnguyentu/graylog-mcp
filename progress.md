@@ -2,25 +2,32 @@
 
 ## Current State
 **Last Updated:** 2026-06-15
-**Branch:** `fix/graylog-basic-auth` — **Last commit:** `e42814d`
+**Branch:** `fix/graylog-basic-auth` — **Last commit:** `14c7199`
 **Active Feature:** none
 
 ## Completed Features
 
-(none yet — update manually as features pass verification)
+- Added Graylog username/password auth alongside existing API token auth.
+- Published scoped package `@tungnguyentu/graylog-mcp-server@1.0.5`.
+- Added repo-local npm publish workflow skill for future releases.
 
 ## What's Next
 
-(fill in: next feature to implement)
+- Merge `fix/graylog-basic-auth` after review or continue feature work from this branch.
 
 ## Baseline Evidence
 
-(fill in: verification commands and their expected output)
+- `npm test`
+- `node --check src/index.js`
+- `node --check src/graylog-auth.js`
+- `npm pack --dry-run`
+- `npm publish --access public`
 
 ## Architecture Notes
 
-(fill in: key architectural decisions)
+- Auth/env parsing lives in `src/graylog-auth.js` so it can be tested without loading MCP runtime dependencies.
+- npm package contents are restricted with the `files` field in `package.json` to avoid publishing local session metadata.
 
 ## Known Risks
 
-(fill in: risks and mitigations)
+- Fresh scoped npm publishes can briefly return `404` on registry lookup before propagation finishes.

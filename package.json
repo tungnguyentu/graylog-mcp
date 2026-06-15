@@ -1,12 +1,22 @@
 {
-    "name": "@lcaliani/graylog-mcp-server",
-    "version": "1.0.4",
+    "name": "@tungnguyentu/graylog-mcp-server",
+    "version": "1.0.5",
     "description": "MCP server for fetching data from Graylog",
     "main": "src/index.js",
     "bin": {
         "graylog-mcp-server": "src/index.js"
     },
+    "files": [
+        "src",
+        "README.md",
+        "LICENSE",
+        "docs/usage.md",
+        "example-config.json"
+    ],
     "type": "module",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "start": "node src/index.js",
         "dev": "node --watch src/index.js",

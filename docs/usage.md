@@ -65,7 +65,7 @@ node src/index.js
 ## Claude Code
 
 ```bash
-claude mcp add graylog-mcp npx @lcaliani/graylog-mcp-server@latest \
+claude mcp add graylog-mcp npx @tungnguyentu/graylog-mcp-server@latest \
   -e GRAYLOG_BASE_URL_INSTANCE_1=http://graylog.example.com:9000 \
   -e GRAYLOG_USERNAME_INSTANCE_1=your_username \
   -e GRAYLOG_PASSWORD_INSTANCE_1=your_password \

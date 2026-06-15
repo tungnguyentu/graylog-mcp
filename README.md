@@ -34,7 +34,7 @@ No installation needed - `npx` downloads and runs the server automatically.
 ### Claude Code
 
 ```bash
-claude mcp add graylog-mcp npx @lcaliani/graylog-mcp-server@latest \
+claude mcp add graylog-mcp npx @tungnguyentu/graylog-mcp-server@latest \
   -e GRAYLOG_BASE_URL_INSTANCE_1=http://your-graylog-production.example.com:9000 \
   -e GRAYLOG_USERNAME_INSTANCE_1=your_production_user \
   -e GRAYLOG_PASSWORD_INSTANCE_1=your_production_password \
@@ -52,7 +52,7 @@ Or add it manually to `~/.claude.json`:
   "mcpServers": {
     "graylog-mcp": {
       "command": "npx",
-      "args": ["@lcaliani/graylog-mcp-server@latest"],
+      "args": ["@tungnguyentu/graylog-mcp-server@latest"],
       "env": {
         "GRAYLOG_BASE_URL_INSTANCE_1":  "http://your-graylog-production.example.com:9000",
         "GRAYLOG_USERNAME_INSTANCE_1": "your_production_user",
@@ -78,7 +78,7 @@ Add to `~/.cursor/mcp.json`:
   "mcpServers": {
     "graylog-mcp": {
       "command": "npx",
-      "args": ["@lcaliani/graylog-mcp-server@latest"],
+      "args": ["@tungnguyentu/graylog-mcp-server@latest"],
       "env": {
         "GRAYLOG_BASE_URL_INSTANCE_1":  "http://your-graylog-production.example.com:9000",
         "GRAYLOG_USERNAME_INSTANCE_1": "your_production_user",

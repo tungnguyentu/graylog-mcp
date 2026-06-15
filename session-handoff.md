@@ -1,30 +1,46 @@
 # Session Handoff
-<!-- Generated: 2026-06-15T08:07:10.166Z | Branch: fix/graylog-basic-auth | Commit: e42814d -->
+<!-- Generated: 2026-06-15T08:50:51.758Z | Branch: fix/graylog-basic-auth | Commit: 14c7199 -->
 
 ## Current Objective
-- (fill in: what was the goal this session?)
+- Ship basic-auth support for Graylog, publish the package under the local npm scope, and preserve the publish workflow in-repo.
 
 ## Completed This Session
-- (no completed todos recorded this session)
+- Added username/password auth support while keeping API token precedence.
+- Published `@tungnguyentu/graylog-mcp-server@1.0.5`.
+- Added repo-local skill at `.codex/skills/npm-publish-workflow/`.
 
 ## Pending / In Progress
-- (none)
+- Commit and push the publish metadata and skill updates if they are not yet on origin.
 
 ## Verification Evidence
 | Check | Status |
 |---|---|
 | feature_list.json | not found |
+| `npm test` | passed |
+| `node --check src/index.js` | passed |
+| `node --check src/graylog-auth.js` | passed |
+| `npm pack --dry-run` | passed |
+| `npm publish --access public` | passed |
 
 ## Files Changed
-**Branch:** `fix/graylog-basic-auth` — **Last commit:** `e42814d` — fix(auth): support Graylog username and password
+**Branch:** `fix/graylog-basic-auth` — **Last commit:** `14c7199` — chore(session): add local project metadata
 
-- (no uncommitted changes detected)
+- .codex/skills/npm-publish-workflow/SKILL.md
+- .codex/skills/npm-publish-workflow/scripts/publish-package.sh
+- README.md
+- docs/usage.md
+- package-lock.json
+- package.json
+- progress.md
+- session-handoff.md
 
 ## Decisions Made
-- (fill in: architectural choices made and why)
+- Keep npm publish workflow separate from version bump and git automation.
+- Restrict publish contents through `package.json` `files` instead of relying on `.gitignore`.
+- Use `${NPM_TOKEN}` in `~/.npmrc` so token rotation does not require editing npm config again.
 
 ## Blockers / Risks
-- (none)
+- npm registry visibility for a fresh scoped package can lag briefly after successful publish.
 
 ## Next Session Startup
 1. Read `CLAUDE.md` and `feature_list.json`.
@@ -33,4 +49,4 @@
 4. Run verification commands before editing.
 
 ## Recommended Next Step
-- (fill in: the single most important next action)
+- Commit and push the remaining repo changes so the branch matches the published package state.
