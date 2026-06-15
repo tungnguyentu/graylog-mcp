@@ -1,0 +1,7 @@
+- Single-file ESM MCP server in `src/index.js`; package bin is `graylog-mcp-server`.
+- Exposes one tool: `fetch_graylog_messages`.
+- Startup path: `loadInstances()` reads `GRAYLOG_BASE_URL_INSTANCE_N` + `GRAYLOG_API_TOKEN_INSTANCE_N` pairs, optional `GRAYLOG_LABEL_INSTANCE_N`, with legacy `BASE_URL`/`API_TOKEN` fallback only for instance 1.
+- Runtime invariants: only instances with both base URL and token are active; first configured instance becomes default; duplicate labels warn and first label wins.
+- MCP wiring is direct: `ListToolsRequestSchema` advertises the tool, `CallToolRequestSchema` routes requests to Graylog fetch logic.
+- Graylog calls go through axios to `/api/search/universal/relative`; tool responses return JSON in `content[0].text` and errors are surfaced as text instead of throwing.
+- See `mem:tech_stack` for runtime/deps, `mem:suggested_commands` for command entrypoints, `mem:conventions` for behavior/style rules, and `mem:task_completion` for validation expectations.

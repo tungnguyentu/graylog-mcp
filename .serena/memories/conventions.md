@@ -1,0 +1,5 @@
+- Keep the server linear and small; avoid extra abstraction unless a second Graylog behavior clearly shares the same change surface.
+- Preserve instance discovery semantics: numbered env vars define active servers, instance 1 keeps legacy env fallback, and duplicate labels should stay warning-only.
+- Tool contract is stable: `query` is required; `instance`, `searchTimeRangeInSeconds`, `searchCountLimit`, and `fields` are optional plain scalars.
+- Error handling is user-facing text in MCP tool content; only unknown tool names throw.
+- Prefer guard clauses and named intermediates over nested conditionals when expanding request handling or instance selection.

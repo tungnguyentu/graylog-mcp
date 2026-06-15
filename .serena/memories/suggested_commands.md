@@ -1,0 +1,5 @@
+- `npm start` runs the MCP server (`node src/index.js`).
+- `npm run dev` starts Node watch mode on `src/index.js`.
+- `node --check src/index.js` is the cheapest syntax check for the only source file.
+- `DEBUG=true npm start` enables stderr logging for Graylog fetch hits/errors.
+- Current caveat: `npm test` is wired to `node test-server.js`, but that file is absent in the repo snapshot and the command fails until the test harness is restored.

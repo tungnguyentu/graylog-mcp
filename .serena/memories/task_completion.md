@@ -1,0 +1,3 @@
+- Minimum check before shipping source edits: `node --check src/index.js`.
+- Launch smoke check: `npm start` with the required Graylog env vars set; confirm the server starts and lists the configured tool without immediate startup errors.
+- `npm test` is not currently a valid completion gate because it points to missing `test-server.js`; fix or replace it before treating it as authoritative.

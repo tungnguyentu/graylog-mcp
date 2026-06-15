@@ -1,0 +1,6 @@
+- Runtime: Node.js >=18.
+- Module system: native ESM (`"type": "module"`), JavaScript only; `src/index.js` is the main source file.
+- Package manager: npm; lockfile is `package-lock.json`.
+- Core deps: `@modelcontextprotocol/sdk` for MCP server/transport, `axios` for Graylog HTTP, `zod` is present in deps but not used in the current source file.
+- Dev deps: `typescript` and `@types/node` exist, but there is no TS build pipeline in the current repo shape.
+- No transpile/build step is required for the current code path.
