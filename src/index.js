@@ -7,42 +7,16 @@ import {
     ListToolsRequestSchema
 } from "@modelcontextprotocol/sdk/types.js";
 import axios from "axios";
-
-function loadInstances() {
-    const declaredNumbers = Object.keys(process.env)
-        .map(key => key.match(/^GRAYLOG_BASE_URL_INSTANCE_(\d+)$/))
-        .filter(Boolean)
-        .map(match => parseInt(match[1], 10))
-        .sort((a, b) => a - b);
-
-    const numbers = declaredNumbers.includes(1) ? declaredNumbers : [1, ...declaredNumbers];
-
-    const instances = [];
-
-    for (const i of numbers) {
-        const baseUrl  = process.env[`GRAYLOG_BASE_URL_INSTANCE_${i}`]
-                      ?? (i === 1 ? process.env.BASE_URL  : null)
-                      ?? null;
-        const apiToken = process.env[`GRAYLOG_API_TOKEN_INSTANCE_${i}`]
-                      ?? (i === 1 ? process.env.API_TOKEN : null)
-                      ?? null;
-        const label    = process.env[`GRAYLOG_LABEL_INSTANCE_${i}`]
-                      ?? `instance_${i}`;
-
-        if (baseUrl && apiToken) {
-            instances.push({ label, baseUrl, apiToken });
-        }
-    }
-
-    return instances;
-}
+import { pathToFileURL } from "node:url";
+import { loadInstances } from "./graylog-auth.js";
 
 const INSTANCES = loadInstances();
 
 if (INSTANCES.length === 0) {
     console.error(
         "[graylog-mcp] No Graylog instances configured. " +
-        "Set at least GRAYLOG_BASE_URL_INSTANCE_1 and GRAYLOG_API_TOKEN_INSTANCE_1."
+        "Set at least GRAYLOG_BASE_URL_INSTANCE_1 plus either " +
+        "GRAYLOG_API_TOKEN_INSTANCE_1 or GRAYLOG_USERNAME_INSTANCE_1/GRAYLOG_PASSWORD_INSTANCE_1."
     );
 }
 
@@ -50,7 +24,7 @@ const INSTANCE_BY_LABEL = {};
 for (const inst of INSTANCES) {
     if (INSTANCE_BY_LABEL[inst.label]) {
         console.error(
-            `[graylog-mcp] Warning: duplicate label "${inst.label}" — ` +
+            `[graylog-mcp] Warning: duplicate label "${inst.label}" - ` +
             `only the first instance with this label will be used. ` +
             `Check your GRAYLOG_LABEL_INSTANCE_N configuration.`
         );
@@ -60,7 +34,7 @@ for (const inst of INSTANCES) {
 }
 
 const DEFAULT_INSTANCE = INSTANCES[0] ?? null;
-const ACTIVE_LABELS    = INSTANCES.map(i => i.label);
+const ACTIVE_LABELS = INSTANCES.map(i => i.label);
 
 const server = new Server({
     name: "simple-graylog-mcp",
@@ -137,7 +111,7 @@ async function fetchGraylogMessages(request) {
     if (!instance) {
         const available = ACTIVE_LABELS.length > 0
             ? `Available instances: ${ACTIVE_LABELS.join(", ")}.`
-            : "No instances are configured. Set GRAYLOG_BASE_URL_INSTANCE_N and GRAYLOG_API_TOKEN_INSTANCE_N.";
+            : "No instances are configured. Set GRAYLOG_BASE_URL_INSTANCE_N and either GRAYLOG_API_TOKEN_INSTANCE_N or GRAYLOG_USERNAME_INSTANCE_N/GRAYLOG_PASSWORD_INSTANCE_N.";
         return {
             result: [],
             content: [{
@@ -147,10 +121,10 @@ async function fetchGraylogMessages(request) {
         };
     }
 
-    const query                    = args.query;
+    const query = args.query;
     const searchTimeRangeInSeconds = args.searchTimeRangeInSeconds ?? 900;
-    const searchCountLimit         = args.searchCountLimit ?? 50;
-    const fields                   = args.fields ?? '*';
+    const searchCountLimit = args.searchCountLimit ?? 50;
+    const fields = args.fields ?? '*';
 
     try {
         const response = await axios.get(`${instance.baseUrl}/api/search/universal/relative`, {
@@ -161,16 +135,19 @@ async function fetchGraylogMessages(request) {
                 fields,
             },
             headers: {
-                'Accept': 'application/json',
+                Accept: 'application/json',
             },
             auth: {
-                username: instance.apiToken,
-                password: 'token',
+                username: instance.username,
+                password: instance.password,
             },
         });
 
         if (process.env.DEBUG === "true") {
-            console.error(`[graylog-mcp] instance=${instance.label} query=${query} hits=${response.data?.total_results ?? '?'}`);
+            console.error(
+                `[graylog-mcp] instance=${instance.label} auth=${instance.authMode} ` +
+                `query=${query} hits=${response.data?.total_results ?? '?'}`
+            );
         }
 
         return {
@@ -192,5 +169,11 @@ async function fetchGraylogMessages(request) {
     }
 }
 
-const transport = new StdioServerTransport();
-await server.connect(transport);
+export {
+    fetchGraylogMessages,
+};
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+    const transport = new StdioServerTransport();
+    await server.connect(transport);
+}
