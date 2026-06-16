@@ -31,18 +31,38 @@ Replace `N` with `1`, `2`, `3`, ... to register as many instances as needed. Eac
 
 No installation needed - `npx` downloads and runs the server automatically.
 
-### Claude Code
+### Recommended launch form
+
+Use `npx --yes @tungnguyentu/graylog-mcp-server@latest` instead of a bare `npx` package argument. This avoids a startup failure some MCP clients surface as `calling "initialize": EOF`.
+
+### Codex
+
+Add the server from the CLI:
 
 ```bash
-claude mcp add graylog-mcp npx @tungnguyentu/graylog-mcp-server@latest \
+codex mcp add graylog-mcp npx --yes @tungnguyentu/graylog-mcp-server@latest \
   -e GRAYLOG_BASE_URL_INSTANCE_1=http://your-graylog-production.example.com:9000 \
   -e GRAYLOG_USERNAME_INSTANCE_1=your_production_user \
   -e GRAYLOG_PASSWORD_INSTANCE_1=your_production_password \
+  -e GRAYLOG_LABEL_INSTANCE_1=production
+```
+
+Inspect the saved entry with:
+
+```bash
+codex mcp get graylog-mcp
+```
+
+### Claude Code
+
+Add the server from the CLI:
+
+```bash
+claude mcp add graylog-mcp -e GRAYLOG_BASE_URL_INSTANCE_1=http://your-graylog-production.example.com:9000 \
+  -e GRAYLOG_USERNAME_INSTANCE_1=your_production_user \
+  -e GRAYLOG_PASSWORD_INSTANCE_1=your_production_password \
   -e GRAYLOG_LABEL_INSTANCE_1=production \
-  -e GRAYLOG_BASE_URL_INSTANCE_2=http://your-graylog-staging.example.com:9000 \
-  -e GRAYLOG_USERNAME_INSTANCE_2=your_staging_user \
-  -e GRAYLOG_PASSWORD_INSTANCE_2=your_staging_password \
-  -e GRAYLOG_LABEL_INSTANCE_2=staging
+  -- npx --yes @tungnguyentu/graylog-mcp-server@latest
 ```
 
 Or add it manually to `~/.claude.json`:
@@ -52,58 +72,48 @@ Or add it manually to `~/.claude.json`:
   "mcpServers": {
     "graylog-mcp": {
       "command": "npx",
-      "args": ["@tungnguyentu/graylog-mcp-server@latest"],
+      "args": ["--yes", "@tungnguyentu/graylog-mcp-server@latest"],
       "env": {
-        "GRAYLOG_BASE_URL_INSTANCE_1":  "http://your-graylog-production.example.com:9000",
+        "GRAYLOG_BASE_URL_INSTANCE_1": "http://your-graylog-production.example.com:9000",
         "GRAYLOG_USERNAME_INSTANCE_1": "your_production_user",
         "GRAYLOG_PASSWORD_INSTANCE_1": "your_production_password",
-        "GRAYLOG_LABEL_INSTANCE_1":     "production",
-
-        "GRAYLOG_BASE_URL_INSTANCE_2":  "http://your-graylog-staging.example.com:9000",
-        "GRAYLOG_USERNAME_INSTANCE_2":  "your_staging_user",
-        "GRAYLOG_PASSWORD_INSTANCE_2":  "your_staging_password",
-        "GRAYLOG_LABEL_INSTANCE_2":     "staging"
+        "GRAYLOG_LABEL_INSTANCE_1": "production"
       }
     }
   }
 }
 ```
 
-### Cursor
+### Antigravity
 
-Add to `~/.cursor/mcp.json`:
+Antigravity uses the same `mcpServers` JSON shape. Add the server to your Antigravity MCP config or user settings JSON:
 
 ```json
 {
   "mcpServers": {
     "graylog-mcp": {
       "command": "npx",
-      "args": ["@tungnguyentu/graylog-mcp-server@latest"],
+      "args": ["--yes", "@tungnguyentu/graylog-mcp-server@latest"],
       "env": {
-        "GRAYLOG_BASE_URL_INSTANCE_1":  "http://your-graylog-production.example.com:9000",
+        "GRAYLOG_BASE_URL_INSTANCE_1": "http://your-graylog-production.example.com:9000",
         "GRAYLOG_USERNAME_INSTANCE_1": "your_production_user",
         "GRAYLOG_PASSWORD_INSTANCE_1": "your_production_password",
-        "GRAYLOG_LABEL_INSTANCE_1":     "production",
-
-        "GRAYLOG_BASE_URL_INSTANCE_2":  "http://your-graylog-staging.example.com:9000",
-        "GRAYLOG_USERNAME_INSTANCE_2":  "your_staging_user",
-        "GRAYLOG_PASSWORD_INSTANCE_2":  "your_staging_password",
-        "GRAYLOG_LABEL_INSTANCE_2":     "staging"
+        "GRAYLOG_LABEL_INSTANCE_1": "production"
       }
     }
   }
 }
 ```
 
-### Claude Desktop
+### Other JSON-based MCP clients
 
-Config file locations:
+Use the same JSON structure above for clients such as Cursor or Claude Desktop.
+
+Claude Desktop config file locations:
 
 - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - Linux: `~/.config/claude-desktop/claude_desktop_config.json`
 - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-
-Use the same JSON structure shown above for Cursor.
 
 ---
 

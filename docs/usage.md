@@ -62,19 +62,82 @@ GRAYLOG_LABEL_INSTANCE_2=staging
 node src/index.js
 ```
 
-## Claude Code
+## MCP Client Setup
+
+### Recommended launch form
+
+Use `npx --yes @tungnguyentu/graylog-mcp-server@latest`. Some MCP clients can fail during startup with `calling "initialize": EOF` when they use the shorter `npx <package>` form.
+
+### Codex
 
 ```bash
-claude mcp add graylog-mcp npx @tungnguyentu/graylog-mcp-server@latest \
+codex mcp add graylog-mcp npx --yes @tungnguyentu/graylog-mcp-server@latest \
   -e GRAYLOG_BASE_URL_INSTANCE_1=http://graylog.example.com:9000 \
   -e GRAYLOG_USERNAME_INSTANCE_1=your_username \
   -e GRAYLOG_PASSWORD_INSTANCE_1=your_password \
   -e GRAYLOG_LABEL_INSTANCE_1=production
 ```
 
-## Cursor / Claude Desktop
+Inspect the saved config with:
 
-Use the JSON examples in [README.md](</Volumes/external/Projects 2/graylog-mcp/README.md:1>). The structure is the same: one MCP server entry plus env vars for each Graylog instance.
+```bash
+codex mcp get graylog-mcp
+```
+
+### Claude Code
+
+```bash
+claude mcp add graylog-mcp \
+  -e GRAYLOG_BASE_URL_INSTANCE_1=http://graylog.example.com:9000 \
+  -e GRAYLOG_USERNAME_INSTANCE_1=your_username \
+  -e GRAYLOG_PASSWORD_INSTANCE_1=your_password \
+  -e GRAYLOG_LABEL_INSTANCE_1=production \
+  -- npx --yes @tungnguyentu/graylog-mcp-server@latest
+```
+
+Manual config in `~/.claude.json`:
+
+```json
+{
+  "mcpServers": {
+    "graylog-mcp": {
+      "command": "npx",
+      "args": ["--yes", "@tungnguyentu/graylog-mcp-server@latest"],
+      "env": {
+        "GRAYLOG_BASE_URL_INSTANCE_1": "http://graylog.example.com:9000",
+        "GRAYLOG_USERNAME_INSTANCE_1": "your_username",
+        "GRAYLOG_PASSWORD_INSTANCE_1": "your_password",
+        "GRAYLOG_LABEL_INSTANCE_1": "production"
+      }
+    }
+  }
+}
+```
+
+### Antigravity
+
+Add the same JSON entry to your Antigravity MCP config or user settings JSON:
+
+```json
+{
+  "mcpServers": {
+    "graylog-mcp": {
+      "command": "npx",
+      "args": ["--yes", "@tungnguyentu/graylog-mcp-server@latest"],
+      "env": {
+        "GRAYLOG_BASE_URL_INSTANCE_1": "http://graylog.example.com:9000",
+        "GRAYLOG_USERNAME_INSTANCE_1": "your_username",
+        "GRAYLOG_PASSWORD_INSTANCE_1": "your_password",
+        "GRAYLOG_LABEL_INSTANCE_1": "production"
+      }
+    }
+  }
+}
+```
+
+### Other JSON-based clients
+
+Clients such as Cursor and Claude Desktop use the same `mcpServers` JSON structure. See [README.md](</Volumes/external/Projects 2/graylog-mcp/README.md:1>) for the full example and Claude Desktop config file locations.
 
 ## Tool Parameters
 

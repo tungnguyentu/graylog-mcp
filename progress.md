@@ -1,8 +1,8 @@
 # Session Progress Log
 
 ## Current State
-**Last Updated:** 2026-06-15
-**Branch:** `fix/graylog-basic-auth` — **Last commit:** `14c7199`
+**Last Updated:** 2026-06-16
+**Branch:** `fix/graylog-basic-auth` — **Last commit:** `99102f9`
 **Active Feature:** none
 
 ## Completed Features
@@ -10,10 +10,11 @@
 - Added Graylog username/password auth alongside existing API token auth.
 - Published scoped package `@tungnguyentu/graylog-mcp-server@1.0.5`.
 - Added repo-local npm publish workflow skill for future releases.
+- Added MCP client setup docs for Codex, Claude Code, and Antigravity, including the `npx --yes` launch form.
 
 ## What's Next
 
-- Merge `fix/graylog-basic-auth` after review or continue feature work from this branch.
+- Commit and push the MCP client documentation update, or continue feature work from this branch.
 
 ## Baseline Evidence
 
@@ -22,6 +23,7 @@
 - `node --check src/graylog-auth.js`
 - `npm pack --dry-run`
 - `npm publish --access public`
+- `git diff -- README.md docs/usage.md`
 
 ## Architecture Notes
 
